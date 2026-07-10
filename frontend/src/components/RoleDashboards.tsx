@@ -6,6 +6,7 @@ import { WorksheetWorkflow } from './WorksheetWorkflow';
 import { LogbookView } from './LogbookView';
 import { TicketSubmission } from './TicketSubmission';
 import { IcrScanner } from './IcrScanner';
+import { BaselineUpload } from './BaselineUpload';
 import { Users, ShieldAlert, BookOpen, UserCheck, Calendar, ArrowRight, CheckCircle2, XCircle, SlidersHorizontal, Layers, Award, MapPin, School as SchoolIcon, BarChart3, FileText, ClipboardList, Layers as BulkIcon } from 'lucide-react';
 import { Table, Column } from './Table';
 import { MetricCard } from './Card';
@@ -1438,6 +1439,7 @@ export const TeacherDashboard: React.FC<DashboardProps> = ({ user, token }) => {
 
   // Modal / workflow triggers
   const [diagnosticStudent, setDiagnosticStudent] = useState<Student | null>(null);
+  const [baselineStudent, setBaselineStudent] = useState<Student | null>(null);
   const [showWorksheetPortal, setShowWorksheetPortal] = useState(false);
   const [showLevelRef, setShowLevelRef] = useState(false);
   const [showIcrScanner, setShowIcrScanner] = useState(false);
@@ -1624,6 +1626,17 @@ export const TeacherDashboard: React.FC<DashboardProps> = ({ user, token }) => {
         onCancel={() => {
           setDiagnosticStudent(null);
         }}
+      />
+    );
+  }
+
+  if (baselineStudent) {
+    return (
+      <BaselineUpload
+        student={baselineStudent}
+        token={token}
+        onPlaced={() => fetchTeacherData()}
+        onBack={() => setBaselineStudent(null)}
       />
     );
   }
@@ -1986,12 +1999,20 @@ export const TeacherDashboard: React.FC<DashboardProps> = ({ user, token }) => {
                   {
                     header: 'Diagnostic Status',
                     accessor: (s) => s.levelHistory.length === 0 ? (
-                      <button
-                        onClick={() => setDiagnosticStudent(s)}
-                        className="bg-amber-600 hover:bg-amber-700 text-white font-mono text-[10px] font-bold px-2 py-1 rounded cursor-pointer"
-                      >
-                        Run Diagnostic
-                      </button>
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          onClick={() => setDiagnosticStudent(s)}
+                          className="bg-amber-600 hover:bg-amber-700 text-white font-mono text-[10px] font-bold px-2 py-1 rounded cursor-pointer"
+                        >
+                          Run Diagnostic
+                        </button>
+                        <button
+                          onClick={() => setBaselineStudent(s)}
+                          className="bg-indigo-600 hover:bg-indigo-700 text-white font-mono text-[10px] font-bold px-2 py-1 rounded cursor-pointer"
+                        >
+                          Upload Sheet
+                        </button>
+                      </div>
                     ) : (
                       <div className="flex items-center gap-2">
                         <span className="text-green-700 font-mono text-[9px] font-bold uppercase bg-green-50 px-2 py-0.5 rounded border border-green-200">
@@ -2071,6 +2092,7 @@ export const VolunteerDashboard: React.FC<DashboardProps> = ({ user, token }) =>
   const [activeClass, setActiveClass] = useState<ClassGroup | null>(null);
 
   const [diagnosticStudent, setDiagnosticStudent] = useState<Student | null>(null);
+  const [baselineStudent, setBaselineStudent] = useState<Student | null>(null);
   const [showWorksheetPortal, setShowWorksheetPortal] = useState(false);
   const [showLevelRef, setShowLevelRef] = useState(false);
   const [showIcrScanner, setShowIcrScanner] = useState(false);
@@ -2256,6 +2278,17 @@ export const VolunteerDashboard: React.FC<DashboardProps> = ({ user, token }) =>
         onCancel={() => {
           setDiagnosticStudent(null);
         }}
+      />
+    );
+  }
+
+  if (baselineStudent) {
+    return (
+      <BaselineUpload
+        student={baselineStudent}
+        token={token}
+        onPlaced={() => fetchVolunteerData()}
+        onBack={() => setBaselineStudent(null)}
       />
     );
   }
@@ -2628,12 +2661,20 @@ export const VolunteerDashboard: React.FC<DashboardProps> = ({ user, token }) =>
                   {
                     header: 'Diagnostic Status',
                     accessor: (s) => s.levelHistory.length === 0 ? (
-                      <button
-                        onClick={() => setDiagnosticStudent(s)}
-                        className="bg-amber-600 hover:bg-amber-700 text-white font-mono text-[10px] font-bold px-2 py-1 rounded cursor-pointer"
-                      >
-                        Run Diagnostic
-                      </button>
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          onClick={() => setDiagnosticStudent(s)}
+                          className="bg-amber-600 hover:bg-amber-700 text-white font-mono text-[10px] font-bold px-2 py-1 rounded cursor-pointer"
+                        >
+                          Run Diagnostic
+                        </button>
+                        <button
+                          onClick={() => setBaselineStudent(s)}
+                          className="bg-indigo-600 hover:bg-indigo-700 text-white font-mono text-[10px] font-bold px-2 py-1 rounded cursor-pointer"
+                        >
+                          Upload Sheet
+                        </button>
+                      </div>
                     ) : (
                       <div className="flex items-center gap-2">
                         <span className="text-green-700 font-mono text-[9px] font-bold uppercase bg-green-50 px-2 py-0.5 rounded border border-green-200">
